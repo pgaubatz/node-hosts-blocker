@@ -47,43 +47,4 @@ describe('parse()', function () {
       done();
     });
   });
-
-  //describe('#export()', function() {
-  //  it('should filter duplicate hosts', function(done) {
-  //    store.import(new StringStream([
-  //      '127.0.0.1 h1',
-  //      '127.0.0.1 h1'
-  //    ]))
-  //      .then(function() {
-  //        store.export(es.writeArray(function(err, lines) {
-  //          lines.should.be.an('array');
-  //          lines.should.deep.equal(['0.0.0.0\th1']);
-  //          done();
-  //        }));
-  //      });
-  //  });
-  //  it('should order hosts', function(done) {
-  //    store.import(new StringStream([
-  //      '127.0.0.1 b',
-  //      '127.0.0.1 a'
-  //    ]))
-  //      .then(function() {
-  //        store.export(es.writeArray(function(err, lines) {
-  //          lines.should.be.an('array');
-  //          lines.should.deep.equal(['0.0.0.0\ta', '\n', '0.0.0.0\tb']);
-  //          done();
-  //        }));
-  //      });
-  //  });
-  //  it('should allow the destination IP to be overridden', function(done) {
-  //    store.import(new StringStream(['127.0.0.1 h1'])).then(function() {
-  //      var writer = es.writeArray(function(err, lines) {
-  //        lines.should.be.an('array');
-  //        lines.should.deep.equal(['1.2.3.4\th1']);
-  //        done();
-  //      });
-  //      store.export(writer, '1.2.3.4');
-  //    });
-  //  });
-  //});
 });
