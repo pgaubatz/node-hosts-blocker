@@ -5,7 +5,7 @@
 var fs = require('fs');
 var optimist = require('optimist');
 
-var lib = require('../lib/');
+var hostsBlocker = require('../index');
 
 var argv = optimist
   .describe('c', 'path to config file')
@@ -34,12 +34,12 @@ if (argv.help) {
   optimist.showHelp();
 
 } else if (argv.server) {
-  lib.createServer(config.destinationIP);
+  hostsBlocker.createServer(config.destinationIP);
 
 } else {
-  lib.fetchHosts(config.sources)
+  hostsBlocker.fetchHosts(config.sources)
     .then(function (hosts) {
       var s = argv.output ? fs.createWriteStream(argv.output) : process.stdout;
-      return lib.writeHosts(hosts, s, config.destinationIP);
+      return hostsBlocker.writeHosts(hosts, s, config.destinationIP);
     });
 }
