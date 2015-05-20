@@ -1,7 +1,7 @@
 {
   "name": "hosts-blocker",
   "description": "Block ads, malware and spyware using the hosts file",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": "pgaubatz/node-hosts-blocker",
   "author": "Patrick Gaubatz <patrick@gaubatz.at>",
   "license": "MIT",
