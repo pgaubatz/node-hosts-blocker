@@ -3,43 +3,95 @@
 'use strict';
 
 var fs = require('fs');
-var optimist = require('optimist');
+
+var byline = require('byline');
+var Promise = require('bluebird');
+var yargs = require('yargs');
 
 var hostsBlocker = require('../index');
 
-var argv = optimist
-  .describe('c', 'path to config file')
-  .describe('s', 'run HTTP server')
-  .describe('o', 'output file')
-  .alias('c', 'config')
-  .alias('s', 'server')
-  .alias('h', 'help')
-  .alias('o', 'output')
-  .default('s', false)
-  .string('c')
-  .string('o')
-  .demand('c')
+var argv = yargs
+  .usage('Usage: $0 <command> [options]')
+  .command('server', 'Run HTTP server', function () {
+    argv = yargs
+      .string('d')
+      .demand('d')
+      .describe('d', 'Listening IP address')
+      .alias('d', 'listen-ip')
+      .argv;
+  })
+  .command('generate', 'Generate a hosts file', function () {
+    argv = yargs
+      .string('l')
+      .demand('l')
+      .describe('l', 'Path to hosts list file')
+      .alias('l', 'hosts-list')
+
+      .string('d')
+      .default('d', '127.0.0.1')
+      .describe('d', 'Destination IP address')
+      .alias('d', 'destination-ip')
+
+      .string('o')
+      .describe('o', 'Output (hosts) file')
+      .alias('o', 'output')
+
+      .string('w')
+      .describe('w', 'Path to whitelist file')
+      .alias('w', 'whitelist')
+      .argv;
+  })
+  .demand(1, 'Error: You must provide a valid command')
   .argv;
 
-var config;
+function load(file) {
+  return new Promise(function (resolve, reject) {
+    var arr = [];
 
-try {
-  config = JSON.parse(fs.readFileSync(argv.config));
-} catch (e) {
-  console.error('Cannot read config file: ', e.message);
-  throw e;
+    function onData(line) {
+      if (line[0] === '/') {
+        line = new RegExp(line.substring(1, line.lastIndexOf('/')));
+      }
+      arr.push(line);
+    }
+
+    byline(fs.createReadStream(file, {encoding: 'utf8'}))
+      .on('data', onData)
+      .on('error', reject)
+      .once('finish', function () {
+        resolve(arr);
+      });
+  });
 }
 
-if (argv.help) {
-  optimist.showHelp();
+var command = argv._[0];
 
-} else if (argv.server) {
-  hostsBlocker.createServer(config.destinationIP);
+if (command === 'server') {
+  hostsBlocker.createServer(argv.d)
+    .once('error', function (err) {
+      console.error('Cannot start HTTP server:', err);
+    });
+
+} else if (command === 'generate') {
+  var sourcesPromise = load(argv.l);
+  var whitelistPromise = argv.w && load(argv.w);
+
+  Promise.all([sourcesPromise, whitelistPromise])
+    .spread(function (sources, whitelist) {
+      hostsBlocker.fetchHosts(sources)
+        .then(function (hosts) {
+          if (whitelist) {
+            hostsBlocker.whitelistHosts(hosts, whitelist);
+          }
+
+          var stream = argv.output
+            ? fs.createWriteStream(argv.output)
+            : process.stdout;
+
+          return hostsBlocker.writeHosts(hosts, stream, argv.d);
+        });
+    });
 
 } else {
-  hostsBlocker.fetchHosts(config.sources)
-    .then(function (hosts) {
-      var s = argv.output ? fs.createWriteStream(argv.output) : process.stdout;
-      return hostsBlocker.writeHosts(hosts, s, config.destinationIP);
-    });
+  yargs.showHelp();
 }
