@@ -81,7 +81,7 @@ if (command === 'server') {
       hostsBlocker.fetchHosts(sources)
         .then(function (hosts) {
           if (whitelist) {
-            hostsBlocker.whitelistHosts(hosts, whitelist);
+            hosts = hostsBlocker.whitelistHosts(hosts, whitelist);
           }
 
           var stream = argv.output
