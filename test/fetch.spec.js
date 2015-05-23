@@ -15,7 +15,7 @@ describe('fetch()', function () {
     var URL = 'http://localhost';
 
     nock(URL)
-      .head('/').reply(200, {'content-type': 'text-plain'})
+      .head('/').reply(200)
       .get('/').reply(200, 'hello world!');
 
     return fetch(URL)
