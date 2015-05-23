@@ -17,6 +17,7 @@
     "bluebird": "^2.9.25",
     "byline": "^4.2.1",
     "request": "^2.55.0",
+    "require-dir": "^0.3.0",
     "through": "^2.3.7",
     "unzip2": "^0.2.5",
     "yargs": "^3.9.1"
