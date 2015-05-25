@@ -16,11 +16,11 @@
   "dependencies": {
     "bluebird": "^2.9.25",
     "byline": "^4.2.1",
+    "commander": "^2.8.1",
     "request": "^2.55.0",
     "require-dir": "^0.3.0",
     "through": "^2.3.7",
-    "unzip2": "^0.2.5",
-    "yargs": "^3.9.1"
+    "unzip2": "^0.2.5"
   },
   "engines": {
     "node": ">= 0.10.0"
@@ -37,6 +37,8 @@
   },
   "preferGlobal": "true",
   "bin": {
-    "nhb": "bin/nhb.js"
+    "nhb": "bin/nhb.js",
+    "nhb-generate": "bin/nhb-generate.js",
+    "nhb-server": "bin/nhb-server.js"
   }
 }
