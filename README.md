@@ -2,6 +2,7 @@
 [![npm version](https://badge.fury.io/js/hosts-blocker.svg)](http://badge.fury.io/js/hosts-blocker)
 [![Build Status](https://travis-ci.org/pgaubatz/node-hosts-blocker.svg?branch=master)](https://travis-ci.org/pgaubatz/node-hosts-blocker)
 [![Coverage Status](https://coveralls.io/repos/pgaubatz/node-hosts-blocker/badge.svg?branch=master)](https://coveralls.io/r/pgaubatz/node-hosts-blocker?branch=master)
+[![Dependency Status](https://david-dm.org/pgaubatz/node-hosts-blocker.svg)](https://david-dm.org/pgaubatz/node-hosts-blocker)
 
 Hosts-Blocker can be used to block ads, malware and spyware using the [hosts file](http://en.wikipedia.org/wiki/Hosts_%28file%29).
 
