@@ -16,6 +16,7 @@ program
   .option('-d, --destination-ip <ip>', 'Destination IP address')
   .option('-o, --output <path>', 'Output (hosts) file')
   .option('-w, --whitelist <path>', 'Path to whitelist file')
+  .option('-u, --ui-hostname <hostname>', 'Hostname for the Web-UI', 'hosts-blocker')
   .parse(process.argv);
 
 if (!program.hostsList) {
@@ -51,6 +52,8 @@ Promise.all([sourcesPromise, whitelistPromise])
         if (whitelist) {
           hosts = hostsBlocker.whitelistHosts(hosts, whitelist);
         }
+
+        hosts.unshift(program.uiHostname);
 
         var stream = program.output
           ? fs.createWriteStream(program.output)

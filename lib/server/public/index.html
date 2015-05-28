@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Hosts-Blocker UI</title>
+</head>
+<body>
+    <h1>Blocked requests:</h1>
+    <pre id="blocks"></pre>
+    <script>
+        var blocksEl = document.getElementById('blocks');
+        var es = new EventSource('/api/live/blocks');
+        es.onmessage = function (event) {
+            blocksEl.innerHTML = event.data + '\n' + blocksEl.innerHTML;
+        };
+    </script>
+</body>
+</html>
