@@ -45,12 +45,26 @@ Don't forget to reload `dnsmasq` for activating this new setting!
 
 ### Generating a hosts file
 
-Finally, you can then use the following command to generate the `/etc/hosts.block` file and tell `dnsmasq` to reload all registered hosts files (using `killall -HUP dnsmasq`):
+Next, you can then use the following command to generate the `/etc/hosts.block` file and tell `dnsmasq` to reload all registered hosts files (using `killall -HUP dnsmasq`):
 
     nhb generate \
-      -l /etc/hosts-blocker/list \
-      -w /etc/hosts-blocker/whitelist \
-      -o /etc/hosts.block \
+      --hosts-list /etc/hosts-blocker/list \
+      --whitelist /etc/hosts-blocker/whitelist \
+      --destination-ip 127.1.1.1 \
+      --ui-hostname hosts-blocker.local \
+      --output /etc/hosts.block \
     && killall -HUP dnsmasq
 
 You may also want to run this command regularly (e.g., weekly or even daily) using `cron`.
+
+### Starting the catch-all HTTP server
+
+Finally, you may want to start the catch-all HTTP server using the following command:
+    
+    nhb server \
+        --listen-ip 127.1.1.1 \
+        --ui-hostname hosts-blocker.local
+    
+This HTTP server will "gracefully" return a HTTP 204 (No Content) for any request to any blocked hostname. For example, if the hostname `ads.somecompany.com` is contained in the blocked hosts file (e.g., `/etc/hosts.block`) then any request like `GET http://ads.somecompany.com/banner.png` will return HTTP 204 (No Content).
+
+Note that the (rudimentary) Web-UI, which is available at http://hosts-blocker.local, can be used to get a live view of blocked requests.
