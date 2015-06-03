@@ -60,5 +60,7 @@ Promise.all([sourcesPromise, whitelistPromise])
           : process.stdout;
 
         return hostsBlocker.writeHosts(hosts, stream, program.destinationIp);
-      });
-  });
+      })
+      .catch(console.error.bind(console));
+  })
+  .catch(console.error.bind(console));
