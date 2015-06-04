@@ -9,10 +9,11 @@
     <pre id="blocks"></pre>
     <script>
         var blocksEl = document.getElementById('blocks');
-        var es = new EventSource('/api/live/blocks');
-        es.onmessage = function (event) {
+        var liveEvents = new EventSource('/api/live/events');
+
+        liveEvents.addEventListener('block', function (event) {
             blocksEl.innerHTML = event.data + '\n' + blocksEl.innerHTML;
-        };
+        });
     </script>
 </body>
 </html>
